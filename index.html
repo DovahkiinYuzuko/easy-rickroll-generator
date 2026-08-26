@@ -36,6 +36,23 @@
 
 <script>
   const DEFAULT_URL = "https://mentalityoflonelyfish.vercel.app";
+  let statusTimer = null;
+
+  function showStatus(message, duration) {
+    const status = document.getElementById("copy-status");
+    status.textContent = message;
+
+    if (statusTimer) {
+      clearTimeout(statusTimer);
+    }
+
+    if (duration) {
+      statusTimer = setTimeout(function () {
+        status.textContent = "";
+        statusTimer = null;
+      }, duration);
+    }
+  }
 
   function generate() {
     const text = document.getElementById("text").value;
@@ -44,7 +61,7 @@
     if (!text) {
       document.getElementById("markdown-output").textContent = "";
       document.getElementById("html-output").textContent = "";
-      document.getElementById("copy-status").textContent = "Input text";
+      showStatus("Input text", 2000);
       return;
     }
 
@@ -55,7 +72,7 @@
 
     document.getElementById("markdown-output").textContent = markdown;
     document.getElementById("html-output").textContent = html;
-    document.getElementById("copy-status").textContent = "";
+    showStatus("", 0);
   }
 
   function copyText(elementId) {
@@ -63,9 +80,9 @@
     if (!text) return;
 
     navigator.clipboard.writeText(text).then(function () {
-      document.getElementById("copy-status").textContent = "Copied";
+      showStatus("Copied", 2000);
     }).catch(function () {
-      document.getElementById("copy-status").textContent = "Fail copy";
+      showStatus("Fail copy", 2000);
     });
   }
 </script>
