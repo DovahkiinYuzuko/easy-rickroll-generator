@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>easy-rickroll generator</title>
+</head>
+<body>
+
+<h2>easy-rickroll generator</h2>
+
+<p>
+  <label for="text">Text:</label><br>
+  <input type="text" id="text" placeholder="Text to embed" size="50">
+</p>
+
+<p>
+  <label for="url">Custom URL (optional):</label><br>
+  <input type="text" id="url" placeholder="Leave blank to use the default URL" size="50">
+</p>
+
+<p>
+  <button onclick="generate()">Generate</button>
+</p>
+
+<hr>
+
+<p><strong>Markdown:</strong></p>
+<pre id="markdown-output"></pre>
+<button onclick="copyText('markdown-output')">Copy Markdown</button>
+
+<p><strong>HTML:</strong></p>
+<pre id="html-output"></pre>
+<button onclick="copyText('html-output')">Copy HTML</button>
+
+<p id="copy-status"></p>
+
+<script>
+  const DEFAULT_URL = "https://mentalityoflonelyfish.vercel.app";
+
+  function generate() {
+    const text = document.getElementById("text").value;
+    const customUrl = document.getElementById("url").value.trim();
+
+    if (!text) {
+      document.getElementById("markdown-output").textContent = "";
+      document.getElementById("html-output").textContent = "";
+      document.getElementById("copy-status").textContent = "Input text";
+      return;
+    }
+
+    const url = customUrl || DEFAULT_URL;
+
+    const markdown = "[" + text + "](<" + url + ">)";
+    const html = '<a href="' + url + '">' + text + "</a>";
+
+    document.getElementById("markdown-output").textContent = markdown;
+    document.getElementById("html-output").textContent = html;
+    document.getElementById("copy-status").textContent = "";
+  }
+
+  function copyText(elementId) {
+    const text = document.getElementById(elementId).textContent;
+    if (!text) return;
+
+    navigator.clipboard.writeText(text).then(function () {
+      document.getElementById("copy-status").textContent = "Copied";
+    }).catch(function () {
+      document.getElementById("copy-status").textContent = "Fail copy";
+    });
+  }
+</script>
+
+</body>
+</html>
